@@ -13,7 +13,7 @@ hi_user()
 
 introduction()
 {
-	local name1="Catherine" name2="Frank" project="simple_shell"
+	local name1="Catherine" name2="Frank" project="simple shell"
 
 	echo "\tMy name is $name1"
 	echo "\tMy partner's name is $name2"
