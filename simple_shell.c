@@ -47,6 +47,7 @@ void print_env(char *env[])
 {
 	int i;
 
+	/*Loop through the environment variables and print them*/
 	for (i = 0; env[i] != NULL; i++)
 	{
 		printf("%s\n", env[i]);

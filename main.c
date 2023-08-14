@@ -2,7 +2,7 @@
 /*declare the display prompt function*/
 void display_prompt(void);
 /*declare the function to print current environment*/
-void print_env(char *env[]);
+void print_env(void);
 /*declare a function to chect env built in*/
 int env_builtin(const char *command);
 /**
@@ -37,13 +37,12 @@ int main(void)
 		}
 		else if (env_builtin(command))
 		{
-			print_env(env);/*print the current environment*/
+			print_env();/*print the current environment*/
 		}
 		else
 		{
 			execute_command(command);
 		}
-
-		return (0);
 	}
+	return (0);
 }
