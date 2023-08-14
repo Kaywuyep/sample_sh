@@ -1,5 +1,10 @@
 #include "main.h"
-
+/*declare the display prompt function*/
+void display_prompt(void);
+/*declare the function to print current environment*/
+void print_env(char *env[]);
+/*declare a function to chect env built in*/
+int env_builtin(const char *command);
 /**
  * main - entry point
  *
@@ -9,30 +14,36 @@ int main(void)
 {
 	char command[MAX_COMMAND_LENGTH];
 	size_t command_len;
-	int status = 0;
 
 	while (1)
 	{
-		/*display to prompt*/
-		printf("simple_shell:) ");
-		fflush(stdout);
-		
+		display_prompt();
+
 		if (fgets(command, sizeof(command), stdin) == NULL)
 		{
 			printf("\n\n\nDisconnecting...\n\n");
-			break;/*handle CTRL D*/
+			break;/*handle CTRL+D or EOF*/
 		}
+		/*remove newline characters*/
 		command_len = strlen(command);
 		if (command_len > 0 && command[command_len - 1] == '\n')
 		{
 			command[command_len - 1] = '\0';
 		}
-		execute_command(command);
-		if (status != 0)
+		if (exit_builtin(command))
 		{
-			fprintf(stderr, "Error: Command execution failed\n");
+			/*Exit the shell*/
+			break;
 		}
-	}
+		else if (env_builtin(command))
+		{
+			print_env(env);/*print the current environment*/
+		}
+		else
+		{
+			execute_command(command);
+		}
 
-	return (0);
+		return (0);
+	}
 }
