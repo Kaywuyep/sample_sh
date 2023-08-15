@@ -3,10 +3,16 @@
  * execute_command - a function that imitates the unix shell
  * @command: const variable
  */
-void execute_command(const char *command)
+void execute_command(const char *command, char *args[])
 {
-	int status = system(command);
+	int status;
 	pid_t pid = fork();
+
+	if (access(command, X_OK) != 0)/*X_OK: Test for execute permission*/
+	{
+		fprintf(stderr, "Command not found: %s\n", command);
+		return;
+	}
 
 	if (pid < 0)
 	{
@@ -14,22 +20,24 @@ void execute_command(const char *command)
 	}
 	else if (pid == 0)
 	{
-		/*Child process*/
-		execlp(command, command, NULL);
-		/*If exec fails, print an error and exit*/
+		/* Child process */
+		execv(command, args);
+
+		/* If exec fails, print an error and exit */
 		perror("Exec error");
 		exit(1);
 	}
 	else
 	{
-		/*Parent process*/
+		/* Parent process */
 		waitpid(pid, &status, 0);
-	}
-	if (status != 0)
-	{
-		printf("Error executing command: %s\n", command);
+		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		{
+			fprintf(stderr, "Error executing command: %s\n", command);
+		}
 	}
 }
+
 /**
  * display_prompt - a function that displays the shell prompt
  *
@@ -43,14 +51,14 @@ void display_prompt(void)
  * print_env - a function that prints current environment
  * @env: current environment and pass envp directly
  */
-void print_env(char *env[])
+void print_env()
 {
 	int i;
 
 	/*Loop through the environment variables and print them*/
-	for (i = 0; env[i] != NULL; i++)
+	for (i = 0; environ[i] != NULL; i++)
 	{
-		printf("%s\n", env[i]);
+		printf("%s\n", environ[i]);
 	}
 }
 /**
