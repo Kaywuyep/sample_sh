@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * get_path_dir - a function that handles the path directories
  * @path_dirs: an array to the path directories

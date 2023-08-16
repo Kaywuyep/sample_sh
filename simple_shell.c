@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * execute_command - a function that imitates the unix shell
  * @command: const variable

@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /**
  * handle_command - Function to handle command execution
  * @command: user command

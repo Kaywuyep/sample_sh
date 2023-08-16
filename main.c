@@ -1,4 +1,4 @@
-#include "main.h"
+#include "shell.h"
 /*declare the display prompt function*/
 void display_prompt(void);
 /*declare the function to print current environment*/

@@ -16,6 +16,11 @@
 #define MAX_ENV_VARS 100  /*maximum number of environment variables*/
 #define BUFF_SIZE 1024
 
+typedef struct {
+	char *data;
+	size_t size;
+} String;
+
 extern char **environ;/*External reference to the environment variables*/
 /*char *strtok(char *str, const char *delim);prototype from man strtok*/
 int exit_builtin(const char *command);
