@@ -14,8 +14,7 @@
 #define MAX_ARGS 64
 #define _GNU_SOURCE /*Define _GNU_SOURCE to enable access to environ*/
 #define MAX_ENV_VARS 100  /*maximum number of environment variables*/
-/*#define WIFEXITED(status)to check if the child process terminated normally*/
-/*#define WEXITSTATUS(status)to retrieve the exit status of the child process*/
+#define BUFF_SIZE 1024
 
 extern char **environ;/*External reference to the environment variables*/
 /*char *strtok(char *str, const char *delim);prototype from man strtok*/
