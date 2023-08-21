@@ -28,10 +28,11 @@ void get_path_dir(char *path_dirs[], int *num_dirs)
 	free(copy_path);
 }
 /**
- * fine_exec - a function that finds executable files
+ * find_executable - a function that finds executable files
  * @command: user command
  * @path_dirs: path directories
- * @num_dirs: n umber of directories
+ * @num_dirs: number of directories
+ * Return: NULL
  */
 char *find_executable(char *command, char *path_dirs[], int num_dirs)
 {

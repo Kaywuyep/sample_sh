@@ -19,6 +19,7 @@ int main(void)
 	ssize_t num_chars;
 	char *path_dirs[MAX_ARGS];
 	int num_dirs = 0;
+	int exit_status = 0;
 
 	get_path_dir(path_dirs, &num_dirs);
 
@@ -26,7 +27,7 @@ int main(void)
 	{
 		display_prompt();
 
-		num_chars = getline(&command, &command_len, stdin);
+		num_chars = _getline(&command, &command_len, stdin);
 		if (num_chars == -1)
 		{
 			printf("\n\n\nDisconnecting...\n\n");
@@ -37,10 +38,21 @@ int main(void)
 		{
 			command[num_chars - 1] = '\0';
 		}
-		if (exit_builtin(command))
+		if (setenv_builtin(command))
 		{
-			/*Exit the shell*/
-			break;
+			/*Command is 'setenv', perform setenv_builtin logic*/
+			handle_setenv(command);
+		}
+		else if (unsetenv_builtin(command))
+		{
+			/*Command is 'unsetenv', perform unsetenv_builtin logic*/
+			handle_unsetenv(command);
+		}
+		else if (exit_builtin(command, &exit_status))
+		{
+			/*Exit the shell with specified exit status*/
+			free(command);
+			exit_shell(exit_status);
 		}
 		else if (env_builtin(command))
 		{

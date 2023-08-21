@@ -2,6 +2,7 @@
 /**
  * execute_command - a function that imitates the unix shell
  * @command: const variable
+ * @args: character arguments
  */
 void execute_command(const char *command, char *args[])
 {
@@ -49,9 +50,8 @@ void display_prompt(void)
 }
 /**
  * print_env - a function that prints current environment
- * @env: current environment and pass envp directly
  */
-void print_env()
+void print_env(void)
 {
 	int i;
 
@@ -69,13 +69,4 @@ void print_env()
 int env_builtin(const char *command)
 {
 	return (strcmp(command, "env") == 0);
-}
-/**
- * exit_builtin - a function that exits the shell
- * @command: user command
- * Return: exit
- */
-int exit_builtin(const char *command)
-{
-	return (strcmp(command, "exit") == 0);
 }
