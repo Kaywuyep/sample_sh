@@ -35,17 +35,21 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs);
 
 char *find_start(char *str, const char *delim);
 char *find_end(char *str, const char *delim);
+char *_strtok(char *str, const char *delim);
 /*char *_strtok(char *str, const char *delim, char **saveptr);*/
-char *_strtok(const char *str, const char *delim, char **saveptr);
+/*char *_strtok(const char *str, const char *delim, char **saveptr);*/
 
-int setenv_builtin(const char *command);
+void setenv_builtin(const char *command);
 void handle_setenv(const char *command);
-int unsetenv_builtin(const char *command);
+void unsetenv_builtin(const char *command);
 void handle_unsetenv(const char *command);
 
 void init_string(size_t *str_len, char **str);
 void append_string(char **str, size_t *str_len, char c);
 int read_buffer(char *buffer, size_t *buffer_pos, ssize_t *bytes_in_buffer);
 ssize_t _getline(char **line, size_t *line_len, FILE *stream);
+
+void handle_cd(char *command);
+
 
 #endif

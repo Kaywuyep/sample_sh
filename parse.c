@@ -11,14 +11,13 @@ void handle_command(char *command, char *path_dirs[], int num_dirs)
 	char *token;
 	int count = 0;
 	char *exec_path;
-	char *saveptr = NULL; /*Initialize saveptr*/
 
-	token = _strtok(command, " ", &saveptr);
+	token = _strtok(command, " ");
 
 	while (token != NULL && count < MAX_ARGS - 1)
 	{
 		args[count] = token;
-		token = _strtok(NULL, " ", &saveptr);
+		token = _strtok(NULL, " ");
 		count++;
 	}
 	args[count] = NULL;

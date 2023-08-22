@@ -3,10 +3,9 @@
  * _strtok - a non-const copy of the command string
  * @str: string to be used
  * @delim: delimiters
- * @saveptr: keeps track of current psition 
  * Return: _strtok
  */
-char *_strtok(const char *str, const char *delim, char **saveptr);
+char *_strtok(char *str, const char *delim);
 /**
  * tokenize_command - Tokenize a command and populate an array of arguments
  * @command: the user command
@@ -16,17 +15,16 @@ char *_strtok(const char *str, const char *delim, char **saveptr);
 int tokenize_command(const char *command, char *args[])
 {
 	int count = 0;
-	char *saveptr = NULL;
 	char *token;
 	char command_copy[MAX_COMMAND_LENGTH]; /*Adjust size as needed*/
 
 	strcpy(command_copy, command);
-	token = _strtok(command_copy, " ", &saveptr);
+	token = _strtok(command_copy, " ");
 
 	while (token != NULL && count < MAX_ARGS - 1)
 	{
 		args[count] = token;
-		token = _strtok(NULL, " ", &saveptr);
+		token = _strtok(NULL, " ");
 		count++;
 	}
 	args[count] = NULL;

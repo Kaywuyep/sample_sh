@@ -1,35 +1,46 @@
 #include "shell.h"
+/*declaring variables*/
+char *_strtok(char *str, const char *delim);
+int tokenize_command(const char *command, char *args[]);
+void set_env_variable(const char *variable, const char *value);
+void unset_env_variable(const char *variable);
 /**
- * execute_builtin_command - Execute a built-in command
- * @args: array of command arguments
- * @count: number of arguments
+ * setenv_builtin - a function that executes the set_env_variable
+ * @command: user command
+ * Return: set_env_variable
  */
-void execute_builtin_command(char *args[], int count)
+void setenv_builtin(const char *command)
 {
-	if (strcmp(args[0], "setenv") == 0)
+	char *args[MAX_ARGS];
+	int count;
+
+	count = tokenize_command(command, args);
+
+	if (count != 3)
 	{
-		if (count != 3)
-		{
-			fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
-		}
-		else
-		{
-			set_env_variable(args[1], args[2]);
-		}
+		fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
+		return;/*returnn an error code*/
 	}
-	else if (strcmp(args[0], "unsetenv") == 0)
+
+	set_env_variable(args[1], args[2]);
+}
+/**
+ * unsetenv_builtin - executes the unset_env_builtin command
+ * @command: user command
+ * Return: unsetenv_variable
+ */
+void unsetenv_builtin(const char *command)
+{
+	char *args[MAX_ARGS];
+	int count;
+
+	count = tokenize_command(command, args);
+
+	if (count != 2)
 	{
-		if (count != 2)
-		{
-			fprintf(stderr, "Usage: unsetenv VARIABLE\n");
-		}
-		else
-		{
-			unset_env_variable(args[1]);
-		}
+		fprintf(stderr, "Usage: unsetenv VARIABLE\n");
+		return;/*return an error code*/
 	}
-	else
-	{
-		/*handle other commands or execute external programs*/
-	}
+
+	unset_env_variable(args[1]);
 }

@@ -7,6 +7,8 @@ void print_env(void);
 int env_builtin(const char *command);
 /*function that gets the path directories*/
 void get_path_dir(char *path_dirs[], int *num_dirs);
+/*function that changed directory*/
+void handle_cd(char *command);
 /**
  * main - entry point
  *
@@ -38,15 +40,13 @@ int main(void)
 		{
 			command[num_chars - 1] = '\0';
 		}
-		if (setenv_builtin(command))
+		if (strstr(command, "setenv ") == command)
 		{
-			/*Command is 'setenv', perform setenv_builtin logic*/
-			handle_setenv(command);
+			setenv_builtin(command);
 		}
-		else if (unsetenv_builtin(command))
+		else if (strstr(command, "unsetenv ") == command)
 		{
-			/*Command is 'unsetenv', perform unsetenv_builtin logic*/
-			handle_unsetenv(command);
+			unsetenv_builtin(command);
 		}
 		else if (exit_builtin(command, &exit_status))
 		{
@@ -57,6 +57,10 @@ int main(void)
 		else if (env_builtin(command))
 		{
 			print_env();/*print the current environment*/
+		}
+		else if (strstr(command, "cd") == command)
+		{
+			handle_cd(command);
 		}
 		else
 		{

@@ -8,8 +8,10 @@ void get_path_dir(char *path_dirs[], int *num_dirs)
 {
 	char *path_env = getenv("PATH");
 	char *copy_path = strdup(path_env);
-	char *token = strtok(copy_path, ":");
+	char *token;
 	int count = 0;
+
+	token = _strtok(copy_path, ":");
 
 	if (path_env == NULL)
 	{
@@ -20,7 +22,7 @@ void get_path_dir(char *path_dirs[], int *num_dirs)
 	while (token != NULL && count < MAX_DIRS)
 	{
 		path_dirs[count] = token;
-		token = strtok(NULL, ":");
+		token = _strtok(NULL, ":");
 		count++;
 	}
 
