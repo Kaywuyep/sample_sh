@@ -45,15 +45,7 @@ void execute_command(const char *command, char *args[])
  */
 void display_prompt(void)
 {
-	char current_dir[1024];
-
-	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-	{
-		perror("MyShell");
-		return;
-	}
 	printf("simple_shell:) ");
-	printf(current_dir);
 	fflush(stdout);
 }
 /**
