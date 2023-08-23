@@ -40,6 +40,10 @@ int main(void)
 		{
 			command[num_chars - 1] = '\0';
 		}
+		if (strlen(command) == 0)
+		{
+			continue;
+		}
 		if (strstr(command, "setenv ") == command)
 		{
 			setenv_builtin(command);

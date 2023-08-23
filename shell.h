@@ -47,9 +47,11 @@ void handle_unsetenv(const char *command);
 void init_string(size_t *str_len, char **str);
 void append_string(char **str, size_t *str_len, char c);
 int read_buffer(char *buffer, size_t *buffer_pos, ssize_t *bytes_in_buffer);
-ssize_t _getline(char **line, size_t *line_len, FILE *stream);
+/*ssize_t _getline(char **line, size_t *line_len, FILE *stream);*/
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
 void handle_cd(char *command);
+
 
 
 #endif
