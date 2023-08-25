@@ -18,5 +18,9 @@
 #define BUFF_SIZE 1024
 
 void display_prompt(void);
+int read_input(char **command, size_t *command_len);
+void handle_command(char *command, char ***argv, int *num_tok);
+void cleanup(char *command, char **argv);
+void execute_command(char **argv);
 
 #endif
