@@ -8,36 +8,26 @@ int main(void)
 {
 	char *command = NULL;
 	size_t command_len = 0;
-	int num_tok = 0, read_cmd;
-	char **argv = NULL;
+	int n_chars;
 
 	while (1)
 	{
 		display_prompt();
 
-		read_cmd = read_input(&command, &command_len);
+		n_chars = read_input(&command, &command_len);
 
-		if (read_cmd == -1)
+		if (n_chars == -1)
 		{
-			/*EOF reached, exit the shell*/
 			break;
 		}
-		else if (read_cmd == 0)
+
+		/*remove newline characters*/
+		if (n_chars > 0 && command[n_chars - 1] == '\n')
 		{
-			/*Empty line, prompt again*/
-			continue;
+			command[n_chars - 1] = '\0';
 		}
-
-		num_tok = 0;
-		handle_command(command, &argv, &num_tok);
-
-		if (num_tok > 0)
-		{
-			execute_command(argv);
-		}
-
-		cleanup(command, argv);
+		execute_command(command);
 	}
-
-	return (0);
+	free(command);
+	return EXIT_SUCCESS;
 }
