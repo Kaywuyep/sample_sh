@@ -11,6 +11,7 @@ int main(void)
 	int n_chars;
 	char **args = NULL;
 	int num_args = 0;
+	char *path = getenv("PATH");
 
 	while (1)
 	{
@@ -40,7 +41,7 @@ int main(void)
 			}
 			else
 			{
-				execute_command(command);
+				execute_command(command, path);
 			}
 		}
 

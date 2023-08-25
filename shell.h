@@ -21,7 +21,10 @@ void display_prompt(void);
 int read_input(char **command, size_t *command_len);
 void handle_command(char *command, char ***args, int *num_tok);
 void cleanup(char *command, char **args, int num_args);
-void execute_command(char *command);
+void execute_command(char *command, const char *path);
 int exit_builtin(char **args);
+
+int is_exec(const char *path);
+char *find_exec(const char *command, const char *path);
 
 #endif
