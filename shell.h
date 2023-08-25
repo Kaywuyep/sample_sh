@@ -19,8 +19,9 @@
 
 void display_prompt(void);
 int read_input(char **command, size_t *command_len);
-void handle_command(char *command, char ***argv, int *num_tok);
-void cleanup(char *command, char **argv);
+void handle_command(char *command, char ***args, int *num_tok);
+void cleanup(char *command, char **args, int num_args);
 void execute_command(char *command);
+int exit_builtin(char **args);
 
 #endif

@@ -42,51 +42,56 @@ int read_input(char **command, size_t *command_len)
 /**
  * handle_command - a function that handles input
  * @command: user command
- * @argv: argument
+ * @args: argument
  * @num_tok: number of token
  */
-void handle_command(char *command, char ***argv, int *num_tok)
+void handle_command(char *command, char ***args, int *num_tok)
 {
 	const char *delim = " \n";
 	char *token;
 	int i = 0;
 	char *command_copy;
 
+	(void)delim;
+
 	command_copy = strdup(command);/*Create a copy of input for processing*/
 
-	token = strtok(command, delim);
+	token = strtok(command, " \n");
 	while (token != NULL)
 	{
 		(*num_tok)++;
-		token = strtok(NULL, delim);
+		token = strtok(NULL, " \n");
 	}
 
-	(*argv) = malloc(sizeof(char *) * (*num_tok + 1));
+	(*args) = malloc(sizeof(char *) * (*num_tok + 1));
 
-	token = strtok(command_copy, delim);
+	token = strtok(command_copy, " \n");
+	i = 0;
 	while (token != NULL)
 	{
-		(*argv)[i] = strdup(token);
+		(*args)[i] = strdup(token);
 		i++;
-		token = strtok(NULL, delim);
+		token = strtok(NULL, " \n");
 	}
-	(*argv)[i] = NULL;
+	(*args)[i] = NULL;
 
 	free(command_copy);
 }
 /**
  * cleanup - a function that cleans up
  * @command: user input
- * @argv: argument
+ * @args: argument
+ * @num_args: number of arguments passed
  */
-void cleanup(char *command, char **argv)
+void cleanup(char *command, char **args, int num_args)
 {
 	int i;
 
-	free(command);
-	for (i = 0; argv[i] != NULL; i++)
+	(void)command;
+
+	for (i = 0; i <= num_args; i++)
 	{
-		free(argv[i]);
+		free(args[i]);
 	}
-	free(argv);
+	free(args);
 }

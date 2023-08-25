@@ -9,6 +9,8 @@ int main(void)
 	char *command = NULL;
 	size_t command_len = 0;
 	int n_chars;
+	char **args = NULL;
+	int num_args = 0;
 
 	while (1)
 	{
@@ -26,8 +28,24 @@ int main(void)
 		{
 			command[n_chars - 1] = '\0';
 		}
-		execute_command(command);
+		handle_command(command, &args, &num_args);
+
+		if (num_args > 0)
+		{
+			if (exit_builtin(args))
+			{
+				cleanup(command, args, num_args);/**Clean up before exiting*/
+				free(command);
+				exit(EXIT_SUCCESS);
+			}
+			else
+			{
+				execute_command(command);
+			}
+		}
+
+		cleanup(command, args, num_args);
 	}
 	free(command);
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
