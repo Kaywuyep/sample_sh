@@ -64,7 +64,11 @@ void handle_command(char *command, char ***args, int *num_tok)
 	}
 
 	(*args) = malloc(sizeof(char *) * (*num_tok + 1));
-
+	if (*args == NULL)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
 	token = strtok(command_copy, " \n");
 	i = 0;
 	while (token != NULL)

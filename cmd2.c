@@ -31,7 +31,7 @@ void execute_command(char *command)
 		if (execve(args[0], args, NULL) == -1)
 		{
 			perror(args[0]);
-			exit(EXIT_FAILURE);
+			_exit(EXIT_FAILURE);
 		}
 	}
 	else
