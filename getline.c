@@ -57,7 +57,7 @@ ssize_t _getline(char **line, size_t *line_len, FILE *stream)
 	ssize_t bytes_read = 0;
 	char current_char;
 
-	(void) stream;
+	(void)stream;
 	/*Clear the previous line data and start fresh*/
 	init_string(line_len, line);
 
@@ -67,8 +67,6 @@ ssize_t _getline(char **line, size_t *line_len, FILE *stream)
                 {
                         bytes_read = read(STDIN_FILENO, buffer, BUFF_SIZE);
                         buffer_pos = 0;/*Reset buffer position for each call*/
-			/*if (*line_len == 0) Handle null command*/
-                                /*return (0);*/
 
                         if (bytes_read <= 0)
                         {

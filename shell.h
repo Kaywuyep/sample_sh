@@ -16,11 +16,8 @@
 #define _GNU_SOURCE /*Define _GNU_SOURCE to enable access to environ*/
 #define MAX_ENV_VARS 100  /*maximum number of environment variables*/
 #define BUFF_SIZE 1024
+#define MAX_PATH_LEN 1024
 
-typedef struct {
-	char *data;
-	size_t size;
-} String;
 
 extern char **environ;/*External reference to the environment variables*/
 

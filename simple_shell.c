@@ -45,7 +45,19 @@ void execute_command(const char *command, char *args[])
  */
 void display_prompt(void)
 {
-	printf("simple_shell:) ");
+	char cwd[MAX_PATH_LEN];
+	/*Assuming that the directory path won't exceed 1024 characters*/
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	{
+		printf("%s$ ", cwd);
+	}
+	else
+	{
+		perror("getcwd");
+		printf("simple_shell:) ");
+	}
+
 	fflush(stdout);
 }
 /**

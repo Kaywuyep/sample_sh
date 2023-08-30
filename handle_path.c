@@ -40,7 +40,7 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs)
 {
 	int i;
 	char exec_path[MAX_COMMAND_LENGTH];
-	char *result;
+	char *result = NULL ;/*initialize to null*/
 
 	for (i = 0; i < num_dirs; i++)
 	{
@@ -60,5 +60,6 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs)
 			return (result);
 		}
 	}
+	free (result);
 	return (NULL);
 }

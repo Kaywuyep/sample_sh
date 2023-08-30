@@ -23,7 +23,7 @@ int tokenize_command(const char *command, char *args[])
 
 	while (token != NULL && count < MAX_ARGS - 1)
 	{
-		args[count] = token;
+		args[count] = strdup(token);
 		token = _strtok(NULL, " ");
 		count++;
 	}
