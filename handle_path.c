@@ -40,6 +40,7 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs)
 {
 	int i;
 	char exec_path[MAX_COMMAND_LENGTH];
+	char *result;
 
 	for (i = 0; i < num_dirs; i++)
 	{
@@ -50,7 +51,13 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs)
 		if (access(exec_path, X_OK) == 0)
 			/*X_OK: Test for execute permission*/
 		{
-			return (strdup(exec_path));
+			result = strdup(exec_path);
+			if (result == NULL)
+			{
+				/*Handle memory allocation failure*/
+				return (NULL);
+			}
+			return (result);
 		}
 	}
 	return (NULL);

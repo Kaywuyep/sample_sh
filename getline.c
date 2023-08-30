@@ -53,7 +53,7 @@ int read_buffer(char *buffer, size_t *buffer_pos, ssize_t *bytes_read)
 ssize_t _getline(char **line, size_t *line_len, FILE *stream)
 {
 	static char buffer[BUFF_SIZE];
-	size_t buffer_pos;
+	size_t buffer_pos = 0;
 	ssize_t bytes_read = 0;
 	char current_char;
 

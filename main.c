@@ -44,11 +44,11 @@ int main(void)
 		{
 			continue;
 		}
-		if (strstr(command, "setenv ") == command)
+		if (strcmp(command, "setenv") == 0)
 		{
 			setenv_builtin(command);
 		}
-		else if (strstr(command, "unsetenv ") == command)
+		else if (strcmp(command, "unsetenv") == 0)
 		{
 			unsetenv_builtin(command);
 		}
