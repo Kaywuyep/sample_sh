@@ -6,29 +6,52 @@
  */
 void get_path_dir(char *path_dirs[], int *num_dirs)
 {
-	char *path_env = getenv("PATH");
-	char *copy_path = strdup(path_env);
+	char *path_env;
+	char *copy_path;
 	char *token;
 	int count = 0;
 
-	token = _strtok(copy_path, ":");
-
+	path_env = getenv("PATH");
 	if (path_env == NULL)
 	{
 		*num_dirs = 0;
 		return;
 	}
-
+	copy_path = strdup(path_env);
+	if (copy_path == NULL)
+	{
+		perror("strdup");
+		exit(EXIT_FAILURE);  /*Handle memory allocation failure*/
+	}
+	token = _strtok(copy_path, ":");
 	while (token != NULL && count < MAX_DIRS)
 	{
-		path_dirs[count] = token;
+		/*Make sure to allocate memory for the token*/
+		path_dirs[count] = strdup(token);
+		if (path_dirs[count] == NULL)
+		{
+			perror("strdup");
+			exit(EXIT_FAILURE);  /*Handle memory allocation failure*/
+		}
+
 		token = _strtok(NULL, ":");
 		count++;
 	}
 
 	*num_dirs = count;
+
+	/*free memory allocated for the copy of path_env*/
 	free(copy_path);
 }
+
+/*path_dirs[count] = token;
+  token = _strtok(NULL, ":");
+  count++;
+  }
+
+ *num_dirs = count;
+ free(copy_path);
+ }*/
 /**
  * find_executable - a function that finds executable files
  * @command: user command
