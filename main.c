@@ -1,52 +1,77 @@
 #include "shell.h"
+/*declare the display prompt function*/
+void display_prompt(void);
+/*declare the function to print current environment*/
+void print_env(void);
+/*declare a function to chect env built in*/
+int env_builtin(const char *command);
+/*function that gets the path directories*/
+void get_path_dir(char *path_dirs[], int *num_dirs);
+/*function that changed directory*/
+void handle_cd(char *command);
 /**
  * main - entry point
  *
- * Return: cmd
+ * Return: 0
  */
 int main(void)
 {
-	char *command = NULL;
+	char *command;
 	size_t command_len = 0;
-	int n_chars;
-	char **args = NULL;
-	int num_args = 0;
-	char *path = getenv("PATH");
+	ssize_t num_chars;
+	char *path_dirs[MAX_ARGS];
+	int num_dirs = 0;
+	int exit_status = 0;
+
+	get_path_dir(path_dirs, &num_dirs);
 
 	while (1)
 	{
 		display_prompt();
 
-		n_chars = read_input(&command, &command_len);
-
-		if (n_chars == -1)
+		num_chars = _getline(&command, &command_len, stdin);
+		if (num_chars == -1)
 		{
-			break;
+			printf("\n\n\nDisconnecting...\n\n");
+			break;/*handle CTRL+D or EOF*/
 		}
-
 		/*remove newline characters*/
-		if (n_chars > 0 && command[n_chars - 1] == '\n')
+		if (num_chars > 0 && command[num_chars - 1] == '\n')
 		{
-			command[n_chars - 1] = '\0';
+			command[num_chars - 1] = '\0';
 		}
-		handle_command(command, &args, &num_args);
-
-		if (num_args > 0)
+		if (strlen(command) == 0)
 		{
-			if (exit_builtin(args))
-			{
-				cleanup(command, args, num_args);/**Clean up before exiting*/
-				free(command);
-				exit(EXIT_SUCCESS);
-			}
-			else
-			{
-				execute_command(command, path);
-			}
+			continue;
 		}
-
-		cleanup(command, args, num_args);
+		if (strstr(command, "setenv ") == command)
+		{
+			setenv_builtin(command);
+		}
+		else if (strstr(command, "unsetenv ") == command)
+		{
+			unsetenv_builtin(command);
+		}
+		else if (exit_builtin(command, &exit_status))
+		{
+			/*Exit the shell with specified exit status*/
+			free(command);
+			exit_shell(exit_status);
+		}
+		else if (env_builtin(command))
+		{
+			print_env();/*print the current environment*/
+		}
+		else if (strstr(command, "cd") == command)
+		{
+			handle_cd(command);
+		}
+		else
+		{
+			handle_command(command, path_dirs, num_dirs);
+		}
 	}
+	/*free allocated memory*/
 	free(command);
-	return (EXIT_SUCCESS);
+	return (0);
 }
