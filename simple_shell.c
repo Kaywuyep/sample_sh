@@ -11,7 +11,7 @@ void execute_command(const char *command, char *args[])
 
 	if (access(command, X_OK) != 0)/*X_OK: Test for execute permission*/
 	{
-		fprintf(stderr, "Command not found: %s\n", command);
+		perror("Command not found");
 		return;
 	}
 
@@ -34,7 +34,7 @@ void execute_command(const char *command, char *args[])
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		{
-			fprintf(stderr, "Error executing command: %s\n", command);
+			perror("Error executing command");
 		}
 	}
 }
