@@ -30,7 +30,7 @@ void handle_command(char *command, char *path_dirs[], int num_dirs)
 	}
 	else
 	{
-		printf("Command '%s' not found.\n", args[0]);
+		perror("Command not found");
 		free(exec_path);
 	}
 }
