@@ -57,4 +57,9 @@ int update_oldpwd(char *path, char *old_dir, size_t max_len);
 int c_dir(char *path, char *old_dir, size_t max_len);
 void handle_cd(char *command, char *old_dir, size_t max_len);
 
+int execute_single_command(char *command);
+int handle_logical_and(char *command, int status);
+int handle_logical_or(char *command, int status);
+void execute_commands_separated(char *command);
+
 #endif

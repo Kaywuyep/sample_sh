@@ -71,6 +71,7 @@ int main(void)
 			handle_command(command, path_dirs, num_dirs);
 		}
 	}
+	execute_commands_separated(command);
 	/*free allocated memory*/
 	free(command);
 	return (0);
