@@ -22,6 +22,10 @@
 
 extern char **environ;/*External reference to the environment variables*/
 
+/*declare the function to print current environment*/
+void print_env(void);
+/*declare a function to chect env built in*/
+int env_builtin(const char *command);
 int exit_builtin(const char *command, int *exit_status);
 void exit_shell(int exit_status);
 void execute_command(const char *command, char *args[]);
@@ -48,8 +52,9 @@ int read_buffer(char *buffer, size_t *buffer_pos, ssize_t *bytes_in_buffer);
 /*ssize_t _getline(char **line, size_t *line_len, FILE *stream);*/
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
-void handle_cd(char *command);
-
-
+/*void handle_cd(char *command);*/
+int update_oldpwd(char *path, char *old_dir, size_t max_len);
+int c_dir(char *path, char *old_dir, size_t max_len);
+void handle_cd(char *command, char *old_dir, size_t max_len);
 
 #endif

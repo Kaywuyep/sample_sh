@@ -7,8 +7,6 @@ void print_env(void);
 int env_builtin(const char *command);
 /*function that gets the path directories*/
 void get_path_dir(char *path_dirs[], int *num_dirs);
-/*function that changed directory*/
-void handle_cd(char *command);
 /**
  * main - entry point
  *
@@ -22,6 +20,7 @@ int main(void)
 	char *path_dirs[MAX_ARGS];
 	int num_dirs = 0;
 	int exit_status = 0;
+	char old_working_dir[MAX_PATH_LEN] = "";
 
 	get_path_dir(path_dirs, &num_dirs);
 
@@ -64,7 +63,8 @@ int main(void)
 		}
 		else if (strstr(command, "cd") == command)
 		{
-			handle_cd(command);
+			handle_cd(command, old_working_dir, sizeof(old_working_dir));
+			/*handle_cd(command)*/
 		}
 		else
 		{
