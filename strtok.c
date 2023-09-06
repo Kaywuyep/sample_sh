@@ -7,7 +7,7 @@
  */
 int is_delim(char c, const char *delim)
 {
-	return(strchr(delim, c) != NULL);
+	return (strchr(delim, c) != NULL);
 }
 /**
  * find_token -Helper function to find the next non-delimiter character
@@ -21,18 +21,18 @@ char *find_token(char *str, const char *delim)
 	{
 		str++;
 	}
-	return(str);
+	return (str);
 }
 /**
  * _strtok - a custom strtok function
- * @restricted str: the string to be parse
- * @restricted delim: specifies a set of bytes that delimit the
+ * @str: the string to be parse
+ * @delim: specifies a set of bytes that delimit the
  * tokens in the parsed string
  * Return: start token
  */
 char *_strtok(char *str, const char *delim)
 {
-	static char *end = NULL; /*Stores the last position*/
+	static char *end; /*Stores the last position*/
 	char *start;
 
 	if (str)
@@ -43,19 +43,17 @@ char *_strtok(char *str, const char *delim)
 	{
 		if (!end)
 		{
-			return(NULL); /*No more tokens left*/
+			return (NULL); /*No more tokens left*/
 		}
 		str = end;
 	}
-
 	str = find_token(str, delim);
 
 	if (*str == '\0')
 	{
 		end = NULL;
-		return(NULL); /*No more tokens left*/
+		return (NULL); /*No more tokens left*/
 	}
-
 	start = str;
 	while (*str && !is_delim(*str, delim))
 	{
@@ -71,6 +69,5 @@ char *_strtok(char *str, const char *delim)
 	{
 		end = NULL;
 	}
-
-	return(start);
+	return (start);
 }

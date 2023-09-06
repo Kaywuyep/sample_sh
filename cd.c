@@ -63,14 +63,9 @@ void c_dir(char *path)
 	{
 		perror("simple_shell");
 	}
-	/*if (getcwd(current_dir, sizeof(current_dir)) != NULL)
-	{
-		printf("Changed directory to: %s\n", current_dir);
-	} 
-	else
-	{
-		perror("simple_shell");
-	}*/
+	/*if (getcwd(current_dir, sizeof(current_dir)) != NULL)*/
+	/*{printf("Changed directory to: %s\n", current_dir);}*/
+	/*else{perror("simple_shell");}*/
 }
 /**
  * handle_cd - a function that handles cd command

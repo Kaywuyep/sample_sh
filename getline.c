@@ -64,14 +64,15 @@ ssize_t _getline(char **line, size_t *line_len, FILE *stream)
 	while (1)
 	{
 		if (buffer_pos >= (size_t)bytes_read)
-                {
-                        bytes_read = read(STDIN_FILENO, buffer, BUFF_SIZE);
-                        buffer_pos = 0;/*Reset buffer position for each call*/
+		{
+			bytes_read = read(STDIN_FILENO, buffer, BUFF_SIZE);
+			buffer_pos = 0;/*Reset buffer position for each call*/
 
-                        if (bytes_read <= 0)
-                        {
-                                return (-1);/* Return -1 to indicate EOF or error*/
-                        }
+			if (bytes_read <= 0)
+			{
+				return (-1);
+				/* Return -1 to indicate EOF or error*/
+			}
 		}
 
 		current_char = buffer[buffer_pos++];

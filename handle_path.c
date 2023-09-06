@@ -44,14 +44,12 @@ void get_path_dir(char *path_dirs[], int *num_dirs)
 	free(copy_path);
 }
 
-/*path_dirs[count] = token;
-  token = _strtok(NULL, ":");
-  count++;
-  }
+/*path_dirs[count] = token;*/
+/*token = _strtok(NULL, ":");*/
+/*count++;*/
+/* *num_dirs = count;*/
+/*free(copy_path);*/
 
- *num_dirs = count;
- free(copy_path);
- }*/
 /**
  * find_executable - a function that finds executable files
  * @command: user command
@@ -83,6 +81,6 @@ char *find_executable(char *command, char *path_dirs[], int num_dirs)
 			return (result);
 		}
 	}
-	free (result);
+	free(result);
 	return (NULL);
 }
