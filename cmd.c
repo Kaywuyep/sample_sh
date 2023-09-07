@@ -30,14 +30,24 @@ int handle_logical_and(char *command, int status)
 {
 	char *cmd1 = _strtok(command, "&&");
 	char *cmd2 = _strtok(NULL, "&&");
+	int exit_status_cmd1;
 
 	if (status == 0)
 	{
-		return (execute_single_command(cmd2));
+		exit_status_cmd1 = execute_single_command(cmd1);
+		if (exit_status_cmd1 == 0)
+		{
+			return (execute_single_command(cmd2));
+		}
+		else
+		{
+			return (exit_status_cmd1);
+			/*Return the exit status of cmd1*/
+		}
 	}
 	else
 	{
-		return (status); /*Skip cmd2*/
+		return (status); /* Skip cmd2 */
 	}
 }
 /**
@@ -50,33 +60,73 @@ int handle_logical_or(char *command, int status)
 {
 	char *cmd1 = _strtok(command, "||");
 	char *cmd2 = _strtok(NULL, "||");
+	int exit_status_cmd1;
 
 	if (status != 0)
 	{
-		return (execute_single_command(cmd2));
+		exit_status_cmd1 = execute_single_command(cmd1);
+		if (exit_status_cmd1 != 0)
+		{
+			return (execute_single_command(cmd2));
+		}
+		else
+		{
+			return (exit_status_cmd1);
+			/*Return the exit status of cmd1*/
+		}
 	}
 	else
 	{
-		return (status); /*skip cmd2*/
+		return (status); /* Skip cmd2 */
 	}
 }
 /**
+ * trim_whitespace  - Function to trim leading and
+ * trailing whitespace from a string
+ * @str: string to be used
+ * Return: string
+ */
+char *trim_whitespace(char *str)
+{
+	char *end;
+
+	while (isspace(*str))
+	{
+		str++;
+	}
+
+	if (*str == '\0')
+	{ /*All spaces, return an empty string*/
+		return (str);
+	}
+
+	end = str + strlen(str) - 1;
+	while (end > str && isspace(*end))
+	{
+		end--;
+	}
+
+	end[1] = '\0'; /*Null-terminate the trimmed string*/
+	return (str);
+}
+/**
  * execute_commands_separated - Function to execute commands separated
+ * by semicolons, && and || logical operators
  * @command: command
  */
 void execute_commands_separated(char *command)
 {
 	char *commands[MAX_COMMAND_LENGTH];
 	int num_commands = 0;
-	char *token, *input;
-	int status, i, exit_status;
+	char *token;
+	int i, status, exit_status;
+	char *cmd;
 
-	/*Tokenize the input by semicolon*/
+	/*Tokenize the command by semicolon*/
 	token = _strtok(command, ";");
-
 	while (token != NULL && num_commands < MAX_COMMAND_LENGTH)
 	{
-		commands[num_commands++] = token;
+		commands[num_commands++] = trim_whitespace(token);
 		token = _strtok(NULL, ";");
 	}
 
@@ -84,7 +134,7 @@ void execute_commands_separated(char *command)
 
 	for (i = 0; i < num_commands; i++)
 	{
-		command = commands[i];
+		cmd = commands[i]; /*Update the command to current one*/
 		exit_status = 0; /*Status of the current command*/
 
 		if (strstr(command, "&&"))
@@ -100,7 +150,7 @@ void execute_commands_separated(char *command)
 		else
 		{
 			/*Execute a single command*/
-			exit_status = execute_single_command(command);
+			exit_status = execute_single_command(cmd);
 		}
 
 		status = exit_status;
