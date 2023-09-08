@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <ctype.h>
 #include <stdbool.h>/* provides the bool data type and true/false constants*/
 
 #define MAX_COMMAND_LENGTH 1024
@@ -32,7 +33,9 @@ void execute_command(const char *command, char *args[]);
 void display_prompt(void);
 
 void get_path_dir(char *path_dirs[], int *num_dirs);
-void handle_command(char *command, char *path_dirs[], int num_dirs);
+void handle_command(char *command, int *exit_status,
+		char old_working_dir[], char *path_dirs[], int num_dirs);
+/*void handle_command(char *command,char*path_dirs[],intnum_dirs,int status);*/
 char *find_executable(char *command, char *path_dirs[], int num_dirs);
 
 char *find_start(char *str, const char *delim);
@@ -60,6 +63,7 @@ void handle_cd(char *command, char *old_dir, size_t max_len);
 int execute_single_command(char *command);
 int handle_logical_and(char *command, int status);
 int handle_logical_or(char *command, int status);
+char *trim_whitespace(char *str);
 void execute_commands_separated(char *command);
 
 #endif

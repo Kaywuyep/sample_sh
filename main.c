@@ -68,10 +68,11 @@ int main(void)
 		}
 		else
 		{
-			handle_command(command, path_dirs, num_dirs);
+			/*handle_command(command, path_dirs, num_dirs);*/
+			handle_command(command, &exit_status,
+					old_working_dir, path_dirs, num_dirs);
 		}
 	}
-	execute_commands_separated(command);
 	/*free allocated memory*/
 	free(command);
 	return (0);
