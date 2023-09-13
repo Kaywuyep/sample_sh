@@ -17,7 +17,7 @@ void execute(char **command, char *name, char **env, int cicles)
 	if (_strcmp(command[0], "env") != 0)
 		print_env(env);
 
-	/*Check if the command is an absolute path or in the current directory*/
+	/* Check if the command is an absolute path or in the current directory */
 	if (command[0][0] == '/' || command[0][0] == '.')
 	{
 		if (stat(command[0], &st) == 0)
@@ -34,7 +34,8 @@ void execute(char **command, char *name, char **env, int cicles)
 		pathways = _getPATH(env);
 		while (pathways[i])
 		{
-			full_path = _strcat(pathways[i], command[0]);
+			full_path = _strcat(pathways[i], "/");
+			full_path = _strcat(full_path, command[0]); /*Create full path*/
 			i++;
 			if (stat(full_path, &st) == 0)
 			{
