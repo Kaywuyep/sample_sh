@@ -25,7 +25,7 @@ char **tokening(char *buffer, const char *s)
 		exit(EXIT_FAILURE);
 	}
 
-	token = strtok(buffer, s);
+	token = _strtok(buffer, s);
 	while (token != NULL)
 	{
 		commands[i] = malloc(_strlen(token) + 1);
@@ -36,7 +36,7 @@ char **tokening(char *buffer, const char *s)
 			return (NULL);
 		}
 		_strcpy(commands[i], token);
-		token = strtok(NULL, s);
+		token = _strtok(NULL, s);
 		i++;
 	}
 	commands[i] = NULL;
