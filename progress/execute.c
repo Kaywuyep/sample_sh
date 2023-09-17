@@ -24,9 +24,14 @@ void execute(char **command, char *name, char **env, int cicles)
 		{
 			if (execve(command[0], command, env) < 0)
 			{
-				perror(name);
+				perror(name);  /*Print permission-related error*/
 				free_exit(command);
 			}
+		}
+		else
+		{
+			perror(name);  /*Print other errors*/
+			free_exit(command);
 		}
 	}
 	else
@@ -35,13 +40,13 @@ void execute(char **command, char *name, char **env, int cicles)
 		while (pathways[i])
 		{
 			full_path = _strcat(pathways[i], "/");
-			full_path = _strcat(full_path, command[0]); /*Create full path*/
+			full_path = _strcat(full_path, command[0]); /* Create full path */
 			i++;
 			if (stat(full_path, &st) == 0)
 			{
 				if (execve(full_path, command, env) < 0)
 				{
-					perror(name);
+					perror(name);  /*Print permission-related error*/
 					free_dp(pathways);
 					free_exit(command);
 				}
@@ -83,20 +88,42 @@ char **_getPATH(char **env)
 {
 	char *pathvalue = NULL, **pathways = NULL;
 	unsigned int i = 0;
+	int len;
 
-	pathvalue = _strtok(env[i], "=");
 	while (env[i])
 	{
-		if (_strcmp(pathvalue, "PATH"))
+		if (strncmp(env[i], "PATH=", 5) == 0)
 		{
-			pathvalue = _strtok(NULL, "\n");
+			pathvalue = env[i] + 5;
+
+			/*Check if PATH is empty*/
+			if (pathvalue[0] == '\0')
+			{
+				fprintf(stderr, "PATH variable is empty\n");
+				exit(EXIT_FAILURE);
+			}
+
+			/*Remove leading and trailing colons if present*/
+			while (pathvalue[0] == ':')
+				pathvalue++;
+
+			len = strlen(pathvalue);
+			while (len > 0 && pathvalue[len - 1] == ':')
+			{
+				pathvalue[len - 1] = '\0';
+				len--;
+			}
+
+			/*Tokenize the cleaned PATH*/
 			pathways = tokening(pathvalue, ":");
-			return (pathways);
+			return pathways;
 		}
 		i++;
-		pathvalue = _strtok(env[i], "=");
 	}
-	return (NULL);
+
+	/*Handle the case where PATH is not found or is empty*/
+	fprintf(stderr, "PATH variable not found or is empty in environmental variables\n");
+	exit(EXIT_FAILURE);
 }
 
 
