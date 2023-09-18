@@ -36,6 +36,8 @@ int main(int ac, char **av, char **env)
 					shell_exit(command);
 				else if (_strcmp(command[0], "cd") != 0)
 					change_dir(command[1]);
+				else if (_strcmp(command[0], "env") != 0)
+					builtin_env(env);
 				else
 					create_child(command, av[0], env, cicles);
 			}
