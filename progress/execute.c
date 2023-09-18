@@ -108,7 +108,7 @@ char **_getPATH(char **env, char **command)
 			/*Check if PATH is empty*/
 			if (pathvalue[0] == '\0')
 			{
-				fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
+				_fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
 				exit(127);
 			}
 
@@ -131,11 +131,28 @@ char **_getPATH(char **env, char **command)
 	}
 
 	/*Handle the case where PATH is not found or is empty*/
-	fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
+	_fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
 	exit(127);
 }
 
+/**
+ * custom_fprintf - A custom function similar to fprintf
+ * @stream: The output stream (e.g., stderr)
+ * @format: The format string
+ * @...: Variable number of arguments to be formatted and printed
+ *
+ * Description: This function mimics the behavior of fprintf by taking
+ * a format string and a variable number of arguments and printing
+ * the formatted output to the specified stream.
+ */
+void _fprintf(FILE *stream, const char *format, ...)
+{
+	va_list args;
 
+	va_start(args, format);
+	vfprintf(stream, format, args);
+	va_end(args);
+}
 /**
  * msgerror - A function that prints message not found.
  * @name: The name of the shell.
