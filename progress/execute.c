@@ -36,7 +36,7 @@ void execute(char **command, char *name, char **env, int cicles)
 	}
 	else
 	{
-		pathways = _getPATH(env);
+		pathways = _getPATH(env, command);
 		while (pathways[i])
 		{
 			full_path = _strcat(pathways[i], "/");
@@ -76,7 +76,14 @@ void print_env(char **env)
 		i++;
 	}
 }
-
+/**
+ * getpid -  a function that gets the process id
+ */
+pid_t get_process_id(void)
+{
+	pid_t pid = getpid();
+	return (pid);
+}
 
 /**
  * _getPATH - A function to gets the full value from.
@@ -84,11 +91,13 @@ void print_env(char **env)
  * @env: The pointer to enviromental variables.
  * Return: All tokenized pathways for commands.
  */
-char **_getPATH(char **env)
+char **_getPATH(char **env, char **command)
 {
 	char *pathvalue = NULL, **pathways = NULL;
 	unsigned int i = 0;
 	int len;
+
+	pid_t pid = 1;/*get process id*/
 
 	while (env[i])
 	{
@@ -99,15 +108,15 @@ char **_getPATH(char **env)
 			/*Check if PATH is empty*/
 			if (pathvalue[0] == '\0')
 			{
-				fprintf(stderr, "PATH variable is empty\n");
-				exit(EXIT_FAILURE);
+				fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
+				exit(127);
 			}
 
 			/*Remove leading and trailing colons if present*/
 			while (pathvalue[0] == ':')
 				pathvalue++;
 
-			len = strlen(pathvalue);
+			len = _strlen(pathvalue);
 			while (len > 0 && pathvalue[len - 1] == ':')
 			{
 				pathvalue[len - 1] = '\0';
@@ -122,8 +131,8 @@ char **_getPATH(char **env)
 	}
 
 	/*Handle the case where PATH is not found or is empty*/
-	fprintf(stderr, "PATH variable not found or is empty in environmental variables\n");
-	exit(EXIT_FAILURE);
+	fprintf(stderr, "./hsh: %d: %s: not found\n", pid, command[0]);
+	exit(127);
 }
 
 
