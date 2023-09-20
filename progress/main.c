@@ -9,7 +9,7 @@
  */
 int main(int ac, char **av, char **env)
 {
-	char *buffer = NULL, **command = NULL;
+	char *buffer = NULL;
 	size_t buf_size = 0;
 	ssize_t chars_readed = 0;
 	int cicles = 0;
@@ -27,25 +27,7 @@ int main(int ac, char **av, char **env)
 			free(buffer);
 		else
 		{
-			buffer[_strlen(buffer) - 1] = '\0';
-			command = tokening(buffer, " \0");
-			free(buffer); /*Free the dynamically allocated buffer here*/
-			if (command && command[0])
-			{
-				if (_strcmp(command[0], "exit") != 0)
-					shell_exit(command);
-				else if (_strcmp(command[0], "cd") != 0)
-					change_dir(command[1]);
-				else if (_strcmp(command[0], "env") != 0)
-					builtin_env(env);
-				else
-					create_child(command, av[0], env, cicles);
-			}
-			else
-			{
-				/*Handle the case where the command is invalid*/
-				free_dp(command);
-			}
+			shell_command(buffer, av, env, cicles);
 		}
 		fflush(stdin);
 		buffer = NULL, buf_size = 0;

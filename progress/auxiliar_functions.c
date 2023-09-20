@@ -6,7 +6,7 @@
  * @s2: string 2
  * Return: 1 if strings are the same, 0 if not
  */
-int _strcmp(char *s1, char *s2)
+int _strcmp(const char *s1, const char *s2)
 {
 	unsigned int i = 0;
 
@@ -26,7 +26,7 @@ int _strcmp(char *s1, char *s2)
  * @s: The input string
  * Return: The length of the string
  */
-unsigned int _strlen(char *s)
+unsigned int _strlen(const char *s)
 {
 	unsigned int len = 0;
 
@@ -43,7 +43,7 @@ unsigned int _strlen(char *s)
  * @src: The pointer to string to copy for
  * Return: A pointer to copied string
  */
-char *_strcpy(char *dest, char *src)
+char *_strcpy(char *dest, const char *src)
 {
 	char *aux = dest;
 
@@ -114,27 +114,4 @@ int _atoi(char *s)
 	if (sign < 0)
 		total = (-1 * (total));
 	return (total);
-}
-/**
- * _strncmp - compares two strings up to specified number of cases
- * @s1: ...
- * @s2: ....
- * @n: ....
- * Return: ...
- */
-
-int _strncmp(const char *s1, const char *s2, size_t n)
-{
-	while (n > 0 && *s1 && *s2)
-	{
-		if (*s1 != *s2)
-			return (*s1 - *s2);
-		s1++;
-		s2++;
-		n--;
-	}
-	if (n == 0)
-		return 0;
-	else
-		return (*s1 - *s2);
 }
