@@ -13,6 +13,7 @@ void create_child(char **command, char *name, char **env, int cicles)
 	int pid = 0;
 	int status = 0;
 	int wait_error = 0;
+	int exec_status;
 
 	pid = fork();
 	if (pid < 0)
@@ -22,8 +23,9 @@ void create_child(char **command, char *name, char **env, int cicles)
 	}
 	else if (pid == 0)
 	{
-		execute(command, name, env, cicles);
-		free_dp(command);
+		exec_status = execute(command, name, env, cicles);
+		exit(exec_status == -1 ? 127 : exec_status);
+		/*free_dp(command);*/
 	}
 	else
 	{
