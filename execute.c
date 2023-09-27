@@ -22,14 +22,14 @@ int execute(char **command, char *name, char **env, int cicles)
 		{
 			if (execve(command[0], command, env) < 0)
 			{
-				perror(name);  /*Print permission-related error*/
+				perror(command[0]);  /*Print permission-related error*/
 				free_exit(command);
 				return (127);
 			}
 		}
 		else
 		{
-			perror(name);  /*Print other errors*/
+			perror(command[0]);  /*Print other errors*/
 			free_exit(command);
 			return (127);
 		}
@@ -73,7 +73,7 @@ int findAndExecuteCommand(char **env, char **command, char *name, int cicles)
 		{
 			if (execve(full_path, command, env) < 0)
 			{
-				perror(name); /* Print permission-related error */
+				perror(command[0]); /* Print permission-related error */
 				free_dp(pathways);
 				free_exit(command);
 				return (1);/*for command not found*/
