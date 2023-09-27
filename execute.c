@@ -11,7 +11,6 @@
 int execute(char **command, char *name, char **env, int cicles)
 {
 	struct stat st;
-	int result;
 
 	(void)name, (void)cicles;
 
@@ -25,22 +24,22 @@ int execute(char **command, char *name, char **env, int cicles)
 			{
 				perror(name);  /*Print permission-related error*/
 				free_exit(command);
-				return (1);
+				return (127);
 			}
 		}
 		else
 		{
 			perror(name);  /*Print other errors*/
 			free_exit(command);
-			return (1);
+			return (127);
 		}
 	}
 	else
 	{
-		result = findAndExecuteCommand(env, command, name, cicles);
-		return (result);
+		if (findAndExecuteCommand(env, command, name, cicles) != 0)
+			return (127);
 	}
-	return (0);
+	return (0);/*succesful execution*/
 }
 
 

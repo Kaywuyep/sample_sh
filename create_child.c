@@ -14,6 +14,7 @@ void create_child(char **command, char *name, char **env, int cicles)
 	int status = 0;
 	int wait_error = 0;
 	int exec_status;
+	int exit_status;
 
 	pid = fork();
 	if (pid < 0)
@@ -24,7 +25,7 @@ void create_child(char **command, char *name, char **env, int cicles)
 	else if (pid == 0)
 	{
 		exec_status = execute(command, name, env, cicles);
-		exit(exec_status == -1 ? 127 : exec_status);
+		exit(exec_status);
 		/*free_dp(command);*/
 	}
 	else
@@ -34,7 +35,18 @@ void create_child(char **command, char *name, char **env, int cicles)
 		{
 			free_exit(command);
 		}
-		free_dp(command);
+		else if (WIFEXITED(status))
+		{
+			/*Get the exit status of the child process*/
+			exit_status = WEXITSTATUS(status);
+			free_dp(command);
+
+			if (exit_status != 0)
+			{
+				/*Child process returned a non-zero exit status*/
+				exit(exit_status);
+			}
+		}
 	}
 }
 
