@@ -1,16 +1,16 @@
-#ifndef SHELL_H
-#define SHELL_H
-
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
+#ifndef _SHELL_H_
+#define _SHELL_H_
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stddef.h>
+#include <fcntl.h>
 #include <errno.h>
-#include <ctype.h>
-#include <stdbool.h>/* provides the bool data type and true/false constants*/
+#include <stdarg.h>
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_DIRS 100
@@ -21,49 +21,65 @@
 #define MAX_PATH_LEN 1024
 
 
-extern char **environ;/*External reference to the environment variables*/
+extern char **environ;
 
-/*declare the function to print current environment*/
-void print_env(void);
-/*declare a function to chect env built in*/
-int env_builtin(const char *command);
-int exit_builtin(const char *command, int *exit_status);
-void exit_shell(int exit_status);
-void execute_command(const char *command, char *args[]);
-void display_prompt(void);
+int main(int ac, char **av, char **env);
+void prompt(void);
 
-void get_path_dir(char *path_dirs[], int *num_dirs);
-void handle_command(char *command, int *exit_status,
-		char old_working_dir[], char *path_dirs[], int num_dirs);
-/*void handle_command(char *command,char*path_dirs[],intnum_dirs,int status);*/
-char *find_executable(char *command, char *path_dirs[], int num_dirs);
+void findAndExecuteCommand(char **env, char **command, char *name, int cicles);
+void shell_command(char *buffer, char **av, char **env, int cicles);
 
-char *find_start(char *str, const char *delim);
-char *find_end(char *str, const char *delim);
+void handle(int signals);
+void _EOF(char *buffer);
+void shell_exit(char **command);
+
+
+void create_child(char **command, char *name, char **env, int cicles);
+int change_dir(const char *path);
+
+
+void execute(char **command, char *name, char **env, int cicles);
+void print_env(char **env);
+void builtin_env(char **env);
+char **_getPATH(char **env, char **command);
+void msgerror(char *name, int cicles, char **command);
+int command_exists(const char *command, char **env);
+
+pid_t get_process_id(void);
+void _fprintf(FILE *stream, const char *format, ...);
+
+char **tokening(char *buffer, const char *s);
+
+
+void free_dp(char **command);
+void free_exit(char **command);
+
+
+int _strcmp(const char *s1, const char *s2);
+unsigned int _strlen(const char *s);
+char *_strcpy(char *dest, const char *src);
+int _atoi(char *s);
+char *_strcat(char *dest, const char *src);
+int _strncmp(const char *s1, const char *s2, size_t n);
+
+
+int is_delim(char c, const char *delim);
+char *find_token(char *str, const char *delim);
 char *_strtok(char *str, const char *delim);
-/*char *_strtok(char *str, const char *delim, char **saveptr);*/
-/*char *_strtok(const char *str, const char *delim, char **saveptr);*/
 
-void setenv_builtin(const char *command);
-void handle_setenv(const char *command);
-void unsetenv_builtin(const char *command);
-void handle_unsetenv(const char *command);
+void update_oldpwd(char *path);
+void c_dir(char *path);
+void handle_cd(char *command);
 
-void init_string(size_t *str_len, char **str);
-void append_string(char **str, size_t *str_len, char c);
-int read_buffer(char *buffer, size_t *buffer_pos, ssize_t *bytes_in_buffer);
-/*ssize_t _getline(char **line, size_t *line_len, FILE *stream);*/
+
+int shell_setenv(const char *name, const char *value);
+int shell_unsetenv(const char *name);
+
+
+int set_pwd_env(void);
+int restore_home(void);
+
+
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
-/*void handle_cd(char *command);*/
-int update_oldpwd(char *path, char *old_dir, size_t max_len);
-int c_dir(char *path, char *old_dir, size_t max_len);
-void handle_cd(char *command, char *old_dir, size_t max_len);
-
-int execute_single_command(char *command);
-int handle_logical_and(char *command, int status);
-int handle_logical_or(char *command, int status);
-char *trim_whitespace(char *str);
-void execute_commands_separated(char *command);
-
-#endif
+#endif /* _SHELL_H_ */

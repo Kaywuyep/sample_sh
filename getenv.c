@@ -1,92 +1,94 @@
 #include "shell.h"
 /**
- * _strtok - a non-const copy of the command string
- * @str: string to be used
- * @delim: delimiters
- * Return: _strtok
+ * setenv_builtin - a function that executes the set_env_variable
+ * @command: user command
+ * Return: set_env_variable
  */
-char *_strtok(char *str, const char *delim);
-/**
- * tokenize_command - Tokenize a command and populate an array of arguments
- * @command: the user command
- * @args: char argument
- * Return: total count
- */
-int tokenize_command(const char *command, char *args[])
-{
-	int count = 0;
-	char *token;
-	char command_copy[MAX_COMMAND_LENGTH]; /*Adjust size as needed*/
-
-	strcpy(command_copy, command);
-	token = _strtok(command_copy, " ");
-
-	while (token != NULL && count < MAX_ARGS - 1)
-	{
-		args[count] = strdup(token);
-		token = _strtok(NULL, " ");
-		count++;
-	}
-	args[count] = NULL;
-
-	return (count);
-}
-/**
- * set_env_variable - Set an environment variable or print an error message
- * @variable: name of the environment variable to set
- * @value: value assign to an environment variable
- */
-void set_env_variable(const char *variable, const char *value)
-{
-	if (setenv(variable, value, 1) != 0)
-	{
-		perror("setenv");
-	}
-}
-/**
- * handle_setenv - Handle the 'setenv' command
- * @command: user command string
- */
-void handle_setenv(const char *command)
+void setenv_builtin(const char *command)
 {
 	char *args[MAX_ARGS];
 	int count;
+	char *command_copy;
+	char **tokens;
 
-	count = tokenize_command(command, args);
+	command_copy = strdup(command);
+	if (command_copy == NULL)
+	{
+		perror("strdup");
+		return;
+	}
+	tokens = tokening(command_copy, " ");
+	if (tokens == NULL)
+	{
+		free(command_copy);
+		return;
+	}
+	count = 0;
+	while (tokens[count] != NULL)
+	{
+		if (count < MAX_ARGS)
+			args[count] = tokens[count];
+		count++;
+	}
 
 	if (count != 3)
 	{
-		fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
+		_fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
+		free_dp(tokens); /*Free memory and continue*/
+		free(command_copy);
+		return;
+	}
+	if (setenv(args[1], args[2], 1) != 0)
+	{
+		perror("setenv");
+	}
+	free_dp(tokens);
+	free(command_copy);
+}
+/**
+ * unsetenv_builtin - executes the unset_env_builtin command
+ * @command: user command
+ * Return: unsetenv_variable
+ */
+void unsetenv_builtin(const char *command)
+{
+	char *args[MAX_ARGS];
+	int count;
+	char *command_copy;
+	char **tokens;
+
+	command_copy = strdup(command);
+	if (command_copy == NULL)
+	{
+		perror("strdup");
 		return;
 	}
 
-	set_env_variable(args[1], args[2]);
-}
-/**
- * unset_env_variable - Unset an environment variable or print an error message
- * @variable: name of the environment variable to unset
- */
-void unset_env_variable(const char *variable)
-{
-	if (unsetenv(variable) != 0)
+	tokens = tokening(command_copy, " ");
+	if (tokens == NULL)
 	{
-		perror("unsetenv");
+		free(command_copy);
+		return;
 	}
-}
-/**
- * handle_unsetenv - Handle the 'unsetenv' command
- * @command: user command string
- */
-void handle_unsetenv(const char *command)
-{
-	char *args[MAX_ARGS];
-	int count = tokenize_command(command, args);
+	count = 0;
+	while (tokens[count] != NULL)
+	{
+		if (count < MAX_ARGS)
+			args[count] = tokens[count];
+		count++;
+	}
 
 	if (count != 2)
 	{
-		fprintf(stderr, "Usage: unsetenv VARIABLE\n");
+		_fprintf(stderr, "Usage: unsetenv VARIABLE\n");
+		free_dp(tokens);
+		free(command_copy);
 		return;
 	}
-
-	unset_env_variable(args[1]);
+	if (unsetenv(args[1]) != 0)
+	{
+		perror("unsetenv");
+	}
+	free_dp(tokens);
+	free(command_copy);
 }

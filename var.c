@@ -46,6 +46,34 @@ void shell_command(char *buffer, char **av, char **env, int cicles)
 			change_dir(command[1]);
 		else if (_strcmp(command[0], "env") != 0)
 			builtin_env(env);
+		else if (_strcmp(command[0], "setenv") != 0)
+		{
+			if (command[1] && command[2])
+			{
+				if (shell_setenv(command[1], command[2]) == 0)
+				{
+					printf("Environment variable %s set to %s\n", command[1], command[2]);
+				}
+			}
+			else
+			{
+				_fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
+			}
+		}
+		else if (_strcmp(command[0], "unsetenv") != 0)
+		{
+			if (command[1])
+			{
+				if (shell_unsetenv(command[1]) == 0)
+				{
+					printf("Environment variable %s unset\n", command[1]);
+				}
+			}
+			else
+			{
+				_fprintf(stderr, "Usage: unsetenv VARIABLE\n");
+			}
+		}
 		else
 		{
 			create_child(command, av[0], env, cicles);

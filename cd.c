@@ -1,125 +1,134 @@
 #include "shell.h"
-
 /**
- * update_oldpwd - function that updates old working dir
- * @path: path of pwd
- * @old_dir: buffer to store the old directory
- * @max_len: maximum length of the old directory buffer
- * Return: 1 if successful, 0 otherwise
+ * change_dir - Afunction that changes working directory.
+ * @path: The new current working directory.
+ * Return: 0 on success, -1 on failure.
  */
-int update_oldpwd(char *path, char *old_dir, size_t max_len)
+int change_dir(const char *path)
 {
-	char current_dir[MAX_PATH_LEN];
-	(void)path;
+	char *new_path = NULL, *current_path;
+	char *prev_dir = NULL;
+	const char *home, *oldpwd;
 
-	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+	if (path == NULL || _strcmp(path, "-") == 0)
 	{
-		perror("simple_shell");
-		return (0);
-	}
-
-	if (setenv("OLDPWD", current_dir, 1) != 0)
-	{
-		perror("simple_shell");
-		return (0);
-	}
-
-	if (strlen(current_dir) >= max_len)
-	{
-		fprintf(stderr, "simple_shell: OWD path is too long\n");
-		return (0);
-	}
-
-	strncpy(old_dir, current_dir, max_len);
-	return (1);
-}
-
-/**
- * c_dir - a function that changes the directory
- * @path: working path
- * @old_dir: buffer to store the old directory
- * @max_len: maximum length of the old directory buffer
- * Return: 1 if successful, 0 otherwise
- */
-int c_dir(char *path, char *old_dir, size_t max_len)
-{
-	char *previous_dir = NULL;
-	char current_dir[MAX_PATH_LEN];
-
-	if (strcmp(path, "-") == 0)
-	{
-		/* Handle "cd -" to go to the previous directory */
-		previous_dir = getenv("OLDPWD");
-		if (previous_dir == NULL)
+		home = getenv("HOME");
+		if (home == NULL)
 		{
-			fprintf(stderr, "simple_shell: cd: OLDPWD not set\n");
-			return (0);
+			_fprintf(stderr, "HOME env variable not set\n");
+			return (1);
 		}
-		path = previous_dir;
+		unsetenv("HOME");
+		new_path = strdup(home);
 	}
-
-	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+	else
 	{
-		perror("simple_shell");
-		return (0);
+		new_path = strdup(path);
 	}
-
-	if (chdir(path) != 0)
+	if (new_path == NULL)
 	{
-		perror("simple_shell");
-		return (0);
+		perror("strdup");
+		return (1);
 	}
-
-	if (!update_oldpwd(path, old_dir, max_len))
+	current_path = getcwd(NULL, 0);
+	if (current_path == NULL)
 	{
-		return (0);
+		perror("getcwd");
+		free(new_path);
+		return (1);
 	}
-
-	if (setenv("PWD", path, 1) != 0)
+	if (_strcmp(new_path, "/root") == 0)
 	{
-		perror("simple_shell");
-		return (0);
+		_fprintf(stderr, "Permission denied: %s\n", new_path);
+		free(new_path);
+		free(current_path);
+		return (1);
 	}
-
-	return (1);
-}
-
-/**
- * handle_cd - a function that handles cd command
- * @command: user command
- * @old_dir: buffer to store the old directory
- * @max_len: maximum length of the old directory buffer
- */
-void handle_cd(char *command, char *old_dir, size_t max_len)
-{
-	char *home_dir;
-	char *path;
-
-	if (strcmp(command, "cd") == 0)
+	if (_strcmp(new_path, "-") == 0)
 	{
-		/* If "cd" is entered without an argument, change to $HOME */
-		home_dir = getenv("HOME");
-		if (home_dir == NULL)
+		oldpwd = getenv("OLDPWD");
+		if (oldpwd != NULL)
 		{
-			fprintf(stderr, "simple_shell: HOME dir not found\n");
-		}
-		else
-		{
-			c_dir(home_dir, old_dir, max_len);
+			new_path = strdup(oldpwd);
 		}
 	}
-	else if (strstr(command, "cd ") == command)
+	if (access(new_path, F_OK) != 0)
 	{
-		/* Handle "cd" with an argument */
-		path = command + 3; /* Skip "cd " part */
-		/*if (chdir(path) != 0)*/
-		/*{perror("simple_shell");}*/
-		/*else{update_oldpwd(path, old_dir, max_len);*/
-		/*Update old working directory}*/
-		c_dir(path, old_dir, max_len);
+		_fprintf(stderr, "./hsh: 1: cd: can't cd to %s\n", new_path);
+		free(new_path);
+		free(current_path);
+		return (1);
 	}
-else
-{
-	fprintf(stderr, "simple_shell: Invalid: %s\n", command);
+	if (chdir(new_path) == -1)
+	{
+		perror(new_path);
+		free(new_path);
+		free(current_path);
+		return (1);
+	}
+	if (set_pwd_env() == -1)
+	{
+		free(new_path);
+		free(current_path);
+		return (1);
+	}
+	if (path == NULL || _strcmp(path, "-") == 0)
+	{
+		if (restore_home() == -1)
+		{
+			free(new_path);
+			free(current_path);
+			return (1);
+		}
+	}
+
+	free(new_path);
+	if (prev_dir != NULL)
+	{
+		free(prev_dir);
+	}
+
+	return (0);
 }
+/**
+ * set_pwd_env -Function to set the PWD environment variable
+ * Return: 0 success
+ */
+int set_pwd_env(void)
+{
+	char *cwd = getcwd(NULL, 0);
+
+	if (cwd == NULL)
+	{
+		perror("getcwd");
+		return (-1);
+	}
+
+	if (setenv("PWD", cwd, 1) == -1)
+	{
+		perror("setenv");
+		free(cwd);
+		return (-1);
+	}
+
+	free(cwd);
+	return (0);
+}
+/**
+ * restore_home - Function to restore the HOME environment variable
+ * Return: 0 success
+ */
+int restore_home(void)
+{
+	const char *home = getenv("HOME");
+
+	if (home != NULL)
+	{
+		if (setenv("HOME", home, 1) == -1)
+		{
+			perror("setenv");
+			return (-1);
+		}
+	}
+	return (0);
 }
