@@ -41,7 +41,24 @@ void _EOF(char *buffer)
 	exit(EXIT_SUCCESS);
 }
 
+/**
+ * is_numeric - function to check if a string is numeric
+ * @str: string to be checked
+ * Return: status
+ */
+int is_numeric(const char *str)
+{
+	int i;
 
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if (str[i] < '0' || str[i] > '9')
+		{
+			return (0);
+		}
+	}
+	return (1);
+}
 /**
  * shell_exit - A function that exits the shell.
  * @command: The pointer to tokenized command.
@@ -57,7 +74,16 @@ void shell_exit(char **command)
 		exit(EXIT_SUCCESS);
 	}
 
-	status = _atoi(command[1]);
-	free_dp(command);
-	exit(status);
+	if (is_numeric(command[1]))
+	{
+		status = _atoi(command[1]);
+		free_dp(command);
+		exit(status);
+	}
+	else
+	{
+		_fprintf(stderr, "./hsh: 1: exit: Illegal number: %s\n", command[1]);
+		free_dp(command);
+		exit(2);
+	}
 }
