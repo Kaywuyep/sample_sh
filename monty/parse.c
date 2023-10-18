@@ -100,15 +100,15 @@ int get_opc(stack_t **stack, char *arg, char *item, int count)
  */
 int _isdigit(const char *str)
 {
-    if (str == NULL || *str == '\0')
-        return (0);  /*Not a valid integer if the string is empty or NULL*/
+	if (str == NULL || *str == '\0')
+		return (0);  /*Not a valid integer if the string is empty or NULL*/
 
-    while (*str)
-    {
-        if (!isdigit(*str) && (*str != '-' && *str != '+'))
-            return (0);  /* Not a digit or a valid sign character*/
-        str++;
-    }
+	while (*str)
+	{
+		if (!isdigit(*str) && (*str != '-' && *str != '+'))
+			return (0);  /* Not a digit or a valid sign character*/
+		str++;
+	}
 
-    return (1);  /*All characters are valid digits or signs*/
+	return (1);  /*All characters are valid digits or signs*/
 }

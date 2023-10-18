@@ -59,6 +59,7 @@ typedef struct glob_t {
 
 extern glob_t global;
 extern int value;
+int value;
 
 int main(int argc, char *argv[]);
 void _pall(stack_t **stack, unsigned int line_number);
