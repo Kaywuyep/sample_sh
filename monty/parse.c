@@ -1,6 +1,4 @@
 #include "monty.h"
-
-glob_t global = {NULL, NULL};
 /**
  * handle_command - Read file
  * @argv: Arguments
@@ -12,6 +10,7 @@ void handle_command(char *argv)
 	size_t bufsize = 0;
 	char *arguments = NULL, *item = NULL;
 	stack_t *stack = NULL;
+	glob_t global = {NULL, NULL};
 
 	global.fd = fopen(argv, "r");
 	if (global.fd)
@@ -90,25 +89,5 @@ int get_opc(stack_t **stack, char *arg, char *item, int count)
 	}
 	if (!op[i].opcode)
 		return (2);
-
 	return (0);
-}
-/**
- * _isdigit - Checks for a digit 0 through 9
- * @str: variable
- * Return: 0 or 1
- */
-int _isdigit(const char *str)
-{
-	if (str == NULL || *str == '\0')
-		return (0);  /*Not a valid integer if the string is empty or NULL*/
-
-	while (*str)
-	{
-		if (!isdigit(*str) && (*str != '-' && *str != '+'))
-			return (0);  /* Not a digit or a valid sign character*/
-		str++;
-	}
-
-	return (1);  /*All characters are valid digits or signs*/
 }

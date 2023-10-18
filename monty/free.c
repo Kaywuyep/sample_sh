@@ -24,6 +24,7 @@ void free_dlistint(stack_t *stack)
 void clean_stack(stack_t *stack)
 {
 	stack_t *temp;
+	glob_t global = {NULL, NULL};
 
 	while (stack != NULL)
 	{
