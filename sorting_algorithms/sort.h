@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stddef.h>
 
 
 /**
@@ -28,6 +29,10 @@ void print_list(const listint_t *list);
 size_t lomuto_partition(int *array, ssize_t low, ssize_t high, size_t size);
 void quick_sort_recursive(int *array, ssize_t low, ssize_t high, size_t size);
 int find_max(int *array, int size);
+void merge_sort_recursive(int *array, int *temp, size_t left, size_t right);
+void merge(int *array, int *temp, size_t left, size_t mid, size_t right);
+void max_heapify(int *array, size_t size, int idx, size_t n);
+void radix_count_sort(int *arr, size_t n, int exp, int *result)
 
 void bubble_sort(int *array, size_t size);
 void insertion_sort_list(listint_t **list);
