@@ -32,7 +32,7 @@ int find_max(int *array, int size);
 void merge_sort_recursive(int *array, int *temp, size_t left, size_t right);
 void merge(int *array, int *temp, size_t left, size_t mid, size_t right);
 void max_heapify(int *array, size_t size, int idx, size_t n);
-void radix_count_sort(int *arr, size_t n, int exp, int *result)
+void radix_countSort(int *array, size_t size, int sig, int *buff);
 
 void bubble_sort(int *array, size_t size);
 void insertion_sort_list(listint_t **list);
