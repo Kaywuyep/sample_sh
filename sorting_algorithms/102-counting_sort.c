@@ -45,22 +45,22 @@ void counting_sort(int *array, size_t size)
 	}
 
 	for (i = 0; i < (max + 1); i++)
-		count[i] = 0;
+		count[i] = 0;/*Initialize count array with all zeros*/
 	for (i = 0; i < (int)size; i++)
-		count[array[i]] += 1;
+		count[array[i]] += 1;/*Store the count of each element*/
 	for (i = 0; i < (max + 1); i++)
-		count[i] += count[i - 1];
+		count[i] += count[i - 1];/*Stor d cummulativ count of ech arr*/
 	print_array(count, max + 1);
-
+	/*Find the index of each elmtt of the original array in count array*/
+	/*and place the elements in output array*/
 	for (i = 0; i < (int)size; i++)
 	{
 		sort_done[count[array[i]] - 1] = array[i];
 		count[array[i]] -= 1;
 	}
-
+	/*Copy the sorted elements into original array*/
 	for (i = 0; i < (int)size; i++)
 		array[i] = sort_done[i];
-
 	free(sort_done);
 	free(count);
 }
