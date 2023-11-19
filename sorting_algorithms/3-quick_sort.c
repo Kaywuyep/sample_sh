@@ -1,5 +1,17 @@
 #include "sort.h"
+/**
+ * swap - a function that swaps two variables
+ * @a: variable
+ * @b: variable
+ */
+void swap(int *a, int *b)
+{
+	int temp;
 
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
 /**
  * lomuto_partition - Lomuto partition scheme for quicksort
  * @array: Pointer to the array to be partitioned
@@ -11,7 +23,7 @@
  */
 size_t lomuto_partition(int *array, ssize_t low, ssize_t high, size_t size)
 {
-	int temp, pivot = array[high];
+	int pivot = array[high];
 	ssize_t i = low - 1;
 	ssize_t j;
 
@@ -30,9 +42,7 @@ size_t lomuto_partition(int *array, ssize_t low, ssize_t high, size_t size)
 
 	if (i + 1 != high)
 	{
-		temp = array[i + 1];
-		array[i + 1] = array[high];
-		array[high] = temp;
+		swap(&array[i + i], &array[high]);
 		print_array(array, size);
 	}
 
