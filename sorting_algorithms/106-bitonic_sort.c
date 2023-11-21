@@ -1,5 +1,18 @@
 #include "sort.h"
 /**
+ * swap - a function that swaps two variables
+ * @a: variable
+ * @b: variable
+ */
+void swap(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+/**
  * bitonic_merge - Sort a bitonic sequence inside an array of integers.
  * @array: An array of integers.
  * @size: The size of the array.

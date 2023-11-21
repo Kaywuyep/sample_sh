@@ -24,13 +24,15 @@ typedef struct listint_s
 	struct listint_s *next;
 } listint_t;
 
+void swap_quick(int *array, ssize_t idx1, ssize_t idx2);/*new*/
 void swap(int *a, int *b);
 void swap_shell_sort(int *array, size_t a, size_t b);
 void swap_nodes(listint_t **list, listint_t *node);
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
 size_t lomuto_partition(int *array, ssize_t low, ssize_t high, size_t size);
-void quick_sort_recursive(int *array, ssize_t low, ssize_t high, size_t size);
+void quicksort(int *array, ssize_t low, ssize_t high, int size);/*new*/
+int hoare_partition(int *array, int low, int high, int size);/*new*/
 int find_max(int *array, int size);
 void merge_sort_recursive(int *array, int *temp, size_t left, size_t right);
 void merge(int *array, int *temp, size_t left, size_t mid, size_t right);
